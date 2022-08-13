@@ -21,7 +21,7 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-
+#include <stdio.h>
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart2;
@@ -73,7 +73,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     PA2     ------> USART2_TX
     PA3     ------> USART2_RX
     */
-    GPIO_InitStruct.Pin = USART_TX_Pin|USART_RX_Pin;
+    GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_3;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -101,7 +101,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     PA2     ------> USART2_TX
     PA3     ------> USART2_RX
     */
-    HAL_GPIO_DeInit(GPIOA, USART_TX_Pin|USART_RX_Pin);
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_2|GPIO_PIN_3);
 
   /* USER CODE BEGIN USART2_MspDeInit 1 */
 
@@ -110,5 +110,31 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+int _read(int file, char *ptr, int len)
+{
+  extern UART_HandleTypeDef huart2;
 
+  len = 1;
+  if (HAL_UART_Receive(&huart2, (uint8_t*)ptr, len, HAL_MAX_DELAY) != HAL_OK)
+  {
+    len = EOF;
+  }
+
+  return len;
+}
+
+int _write(int file, char *ptr, int len)
+{
+  extern UART_HandleTypeDef huart2;
+
+  HAL_StatusTypeDef result = HAL_OK;
+
+  result = HAL_UART_Transmit(&huart2, (uint8_t*)ptr, len, HAL_MAX_DELAY);
+  if (result == HAL_ERROR || result == HAL_BUSY)
+  {
+    Error_Handler();
+  }
+
+  return len;
+}
 /* USER CODE END 1 */
