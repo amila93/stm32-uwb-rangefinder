@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 #define BUZZER_FREQ_HZ   500
-#define BEEP_MULTIPLIER  1200
+#define BEEP_MULTIPLIER  100
 
 static uint32_t itrs = 0;
 static uint32_t onItrs = 50;
