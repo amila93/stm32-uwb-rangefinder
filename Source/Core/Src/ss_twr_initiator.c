@@ -255,7 +255,26 @@ void handleResult(double distance)
   }
   prev_distance = distance;
 
-  displayTextOnCorner(dist_str, FONT_LARGE, WHITE, TOP_RIGHT);
+  uint16_t fontColour = GREEN;
+
+  if (distance >= 0.0 && distance <= 0.5)
+  {
+    fontColour = GREEN;
+  }
+  else if (distance > 0.5  && distance <= 2.0)
+  {
+    fontColour = YELLOW;
+  }
+  else if (distance > 2.0  && distance <= 4.5)
+  {
+    fontColour = ORANGE;  // I had to add orange into ssd1331.h
+  }
+  else if (distance > 4.5)
+  {
+    fontColour = RED;
+  }
+
+  displayTextOnCorner(dist_str, FONT_LARGE, fontColour, TOP_RIGHT);
 
   playAudio(distance);
 
